@@ -5,10 +5,12 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-def train_neural_model(model, X, y, num_epochs, verbose=False):
+def train_neural_model(model, X, y, num_epochs, verbose=False, return_loss=False):
     # Define the loss function and optimizer
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=1e-2)
+
+    losses = []
 
     # Training loop
     for epoch in range(num_epochs):
@@ -25,5 +27,9 @@ def train_neural_model(model, X, y, num_epochs, verbose=False):
 
         if verbose and (epoch + 1) % 100 == 0:
             print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')    
+        losses.append(loss.item())
 
-    return model
+    if return_loss:
+        return model, losses
+    else:
+        return model
